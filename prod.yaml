@@ -1,0 +1,34 @@
+application: comic-pull-db
+module: default
+version: live
+runtime: python27
+api_version: 1
+threadsafe: true
+
+builtins:
+- appstats: on
+
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
+
+handlers:
+- url: /admin($|/.*)
+  script: frontend.admin.app
+  login: admin
+- url: /issues($|/.*)
+  script: frontend.issues.app
+  login: required
+- url: /subscriptions($|/.*)
+  script: frontend.subscriptions.app
+  login: required
+- url: /users($|/.*)
+  script: frontend.users.app
+  login: required
+- url: /volumes($|/.*)
+  script: frontend.volumes.app
+  login: required
+- url: /
+  script: frontend.index.app
