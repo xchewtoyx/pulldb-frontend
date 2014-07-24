@@ -37,6 +37,9 @@ handlers:
   login: required
 - url: /
   script: frontend.index.app
+- url: /acquire
+  script: frontend.acquire.app
+  login: required
 - url: /discover
   script: frontend.discover.app
   login: required
