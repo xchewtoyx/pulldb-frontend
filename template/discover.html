@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% set active = "Issues" %}
+{% block title %}Issues{% endblock %}
+{% block content %}
+<div class="jumbotron">
+  <h1>Discover</h1>
+  <div>{{ lipsum(n=1) }}</div>
+</div>
+<div class="row">
+<ul class="nav nav-tabs" role="tablist" id="searchtabs">
+  <li class="active">
+    <a href="#localsearch" role="tab" data-toggle="tab">Search</a>
+  </li>
+  <li>
+    <a href="#comicvine" role="tab" data-toggle="tab">
+      <img class="img-responsive img-rounded"
+           src="http://www.comicvine.com/bundles/comicvinesite/images/logo.png">
+    </a>
+  </li>
+</ul>
+</div> <!-- row -->
+<div class="row">
+<div class="tab-content">
+  <div class="tab-pane active" id="localsearch">local search</div>
+  <div class="tab-pane" id="comicvine">Comicvine search</div>
+</div>
+</div> <!-- row -->
+{% endblock content %}
+{% block footer %}
+<script>
+$( document ).ready(function() {
+  $('#searchtabs a').click(function (e) {
+    e.preventDefault();
+    console.log(e, this);
+    $( this ).tab('show');
+  });
+});
+</script>
+{% endblock footer %}
