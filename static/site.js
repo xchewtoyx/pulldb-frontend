@@ -2,7 +2,7 @@ var Site = {
     clientId: '462995942151-naeu6b7vnecc6hr112a718darg0o6gqp.' + 
 	'apps.googleusercontent.com',
     apiKey: 'AIzaSyB7y3n64f5O5EQISlVQpFNvEnnr79dSVLo',
-    scopes: 'https://www.googleapis.com/auth/plus.me',
+    scopes: 'https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.email',
 
     init : function() {
 	if(api_ready) {

@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% set active = "Issues" %}
-{% block title %}Issues{% endblock %}
+{% set active = "Acquire" %}
+{% block title %}Acquire{% endblock %}
 {% block content %}
 <div class="jumbotron">
   <h1>Acquire</h1>
   <div>Add issues you have expressed an interest in to your library and manage
   your subscriptions.</div>
   <!--Add a button for the user to click to initiate auth sequence -->
-  <div id="auth-required" style="visibility: hidden">
+  <div id="auth-required" style="display: none;">
     Your authorisation is required for access to your library:
-    <span class="btn btn-default" style="visibility: hidden">Authorise</span>
+    <span class="btn btn-default">Authorise</span>
   </div>
 </div>
 <div id="content"></div>
@@ -22,6 +22,8 @@ $(document).on( "pulldbAuthorised", function (token) {
     url: "/api/pulls/list/new",
     dataType: "json",
     success: renderNewPulls,
+    error: function (jqXHR,  textStatus,  errorThrown) {
+      console.log( textStatus, errorThrown )},
     beforeSend: function(jqxhr, settings) {
         jqxhr.setRequestHeader('Authorization', 'Bearer ' + token);
     },
@@ -29,6 +31,7 @@ $(document).on( "pulldbAuthorised", function (token) {
 });
 
 function renderNewPulls(data) {
+  console.log("got data: ", data);
   var items = data.results.length();
   for (var i=0; i<items; i++){
     $("#content").append("<pre>"+data.results[i]+"</pre>");
