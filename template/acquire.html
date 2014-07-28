@@ -16,14 +16,14 @@
 {% endblock content %}
 {% block footer %}
 <script type="text/javascript">
-$(document).on( "pulldbAuthorised", function (token) {
-  console.log("Handling authorised");
+$(document).on( "pulldbAuthorised", function (event, token) {
+  console.log("Handling authorised", token);
   $.ajax({
     url: "/api/pulls/list/new",
     dataType: "json",
     success: renderNewPulls,
     error: function (jqXHR,  textStatus,  errorThrown) {
-      console.log( textStatus, errorThrown )},
+      console.log( "NewPulls Error", textStatus, errorThrown )},
     beforeSend: function(jqxhr, settings) {
         jqxhr.setRequestHeader('Authorization', 'Bearer ' + token);
     },
@@ -31,18 +31,10 @@ $(document).on( "pulldbAuthorised", function (token) {
 });
 
 function renderNewPulls(data) {
-  console.log("got data: ", data);
-  var items = data.results.length();
+  var items = data.results.length;
   for (var i=0; i<items; i++){
     $("#content").append("<pre>"+data.results[i]+"</pre>");
   }
-}
-
-var api_ready;
-function handleApiLoad() {
-  console.log("trigger authready...");
-  $.event.trigger({"type": "pulldbAuthReady"});
-  api_ready = true;
 }
 </script>
 <script src="https://apis.google.com/js/client.js?onload=handleApiLoad">
