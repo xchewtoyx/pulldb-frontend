@@ -4,36 +4,55 @@
 {% block content %}
 <div class="jumbotron">
   <h1>Discover</h1>
-  <div>{{ lipsum(n=1) }}</div>
+  <div>Find volumes and issues to add to your pull list.</div>
 </div>
-<div class="row">
+<div class="panel panel-default">
+<div class="panel-body">
 <ul class="nav nav-tabs" role="tablist" id="searchtabs">
   <li class="active">
     <a href="#localsearch" role="tab" data-toggle="tab">Search</a>
   </li>
   <li>
     <a href="#comicvine" role="tab" data-toggle="tab">
-      <img class="img-responsive img-rounded"
+      <img class="img-rounded" style="height: 20px;"
            src="http://www.comicvine.com/bundles/comicvinesite/images/logo.png">
     </a>
   </li>
 </ul>
-</div> <!-- row -->
-<div class="row">
 <div class="tab-content">
-  <div class="tab-pane active" id="localsearch">local search</div>
-  <div class="tab-pane" id="comicvine">Comicvine search</div>
+  <div class="tab-pane active" id="localsearch">
+    <form role="form">
+      <input type="hidden" name="source" value="local">
+      <div class="input-group">
+        <input type="text" class="form-control" name="q"
+               placeholder="Search local index">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="submit">
+            <i class="fa fa-search"></i></button>
+        </span>
+      </div><!-- /input-group -->
+    </form>
+  </div>
+  <div class="tab-pane" id="comicvine">
+    <form role="form">
+      <input type="hidden" name="source" value="comicvine">
+      <div class="input-group">
+      <input type="text" class="form-control" name="q"
+             placeholder="Search comicvine database">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+          <i class="fa fa-search"></i></button>
+      </span>
+    </div><!-- /input-group -->
+    </form>
+  </div>
 </div>
-</div> <!-- row -->
+</div> <!-- panel-body -->
+</div> <!-- panel -->
+<div id="search-results"></div>
 {% endblock content %}
 {% block footer %}
-<script>
-$( document ).ready(function() {
-  $('#searchtabs a').click(function (e) {
-    e.preventDefault();
-    console.log(e, this);
-    $( this ).tab('show');
-  });
-});
+<script src="/static/discover.js"></script>
+<script src="https://apis.google.com/js/client.js?onload=handleApiLoad">
 </script>
 {% endblock footer %}

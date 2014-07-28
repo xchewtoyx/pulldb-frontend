@@ -1,3 +1,5 @@
+var auth_token;
+
 var Site = {
     clientId: '462995942151-naeu6b7vnecc6hr112a718darg0o6gqp.' +
         'apps.googleusercontent.com',
@@ -27,6 +29,7 @@ var Site = {
         var auth_panel = $('#auth-required');
         if (authResult && !authResult.error) {
             auth_panel.hide();
+            auth_token = authResult.access_token;
             $.event.trigger(
                 {"type": "pulldbAuthorised"}, [authResult.access_token]);
         } else {
@@ -46,8 +49,8 @@ var Site = {
         $("a.subscription").on("click", function () {
             var volume = $(this);
             function toggleSubscription() {
-                volume.find("span.glyphicon").toggleClass(
-                    "glyphicon-heart glyphicon-heart-empty");
+                volume.find("i.fa").toggleClass(
+                    "fa-heart fa-heart-o");
                 if(volume.data("subscribed") == "True") {
                     volume.data("subscribed", "False");
                 } else {
@@ -57,16 +60,40 @@ var Site = {
             if(volume.data("subscribed") == "True") {
                 console.log('unsubscribing...');
                 $.ajax({
-                    url: '/subscriptions/remove/' + volume.data("volume") +
-                        '?type=ajax',
+                    type: "POST",
+                    url: "/api/subscriptions/remove",
+                    data: JSON.stringify({
+                        volumes: [volume.data("volume")],
+                    }),
                     success: toggleSubscription,
+                    error: function (jqXHR,  textStatus,  errorThrown) {
+                        console.log("Subscription Error", textStatus,
+                                    errorThrown )
+                    },
+                    beforeSend: function(jqxhr, settings) {
+                        jqxhr.setRequestHeader('Authorization',
+                                               'Bearer ' + auth_token);
+                    },
                 });
             } else {
-                console.log('subscribing...');
+                console.log('subscribing...', JSON.stringify({
+                    volumes: [volume.data("volume")],
+                }));
                 $.ajax({
-                    url: '/subscriptions/add/' + volume.data("volume") +
-                        '?type=ajax',
+                    type: "POST",
+                    url: "/api/subscriptions/add",
+                    data: JSON.stringify({
+                        volumes: [volume.data("volume")],
+                    }),
                     success: toggleSubscription,
+                    error: function (jqXHR,  textStatus,  errorThrown) {
+                        console.log("Subscription Error", textStatus,
+                                    errorThrown )
+                    },
+                    beforeSend: function(jqxhr, settings) {
+                        jqxhr.setRequestHeader('Authorization',
+                                               'Bearer ' + auth_token);
+                    },
                 });
             }
         });
