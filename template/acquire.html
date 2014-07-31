@@ -12,14 +12,21 @@
     <span class="btn btn-default">Authorise</span>
   </div>
 </div>
-<div id="content"></div>
+<div class="panel panel-default">
+  <div class="panel-heading"><h2>New Issues</h2></div>
+  <div class="panel-body">
+    <div id="content"></div>
+  </div>
+</div>
 {% endblock content %}
 {% block footer %}
+<script src="/static/json-template.js"></script>
+<script src="/static/issues.js"></script>
 <script type="text/javascript">
 $(document).on( "pulldbAuthorised", function (event, token) {
   console.log("Handling authorised", token);
   $.ajax({
-    url: "/api/pulls/list/new",
+    url: "/api/pulls/list/new?context=1",
     dataType: "json",
     success: renderNewPulls,
     error: function (jqXHR,  textStatus,  errorThrown) {
@@ -29,13 +36,6 @@ $(document).on( "pulldbAuthorised", function (event, token) {
     },
   });
 });
-
-function renderNewPulls(data) {
-  var items = data.results.length;
-  for (var i=0; i<items; i++){
-    $("#content").append("<pre>"+data.results[i]+"</pre>");
-  }
-}
 </script>
 <script src="https://apis.google.com/js/client.js?onload=handleApiLoad">
 </script>

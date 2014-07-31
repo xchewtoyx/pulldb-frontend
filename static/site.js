@@ -56,7 +56,7 @@ var Site = {
                 } else {
                     volume.data("subscribed", "True");
                 }
-            };
+            }
             if(volume.data("subscribed") == "True") {
                 console.log('unsubscribing...');
                 $.ajax({
@@ -68,7 +68,7 @@ var Site = {
                     success: toggleSubscription,
                     error: function (jqXHR,  textStatus,  errorThrown) {
                         console.log("Subscription Error", textStatus,
-                                    errorThrown )
+                                    errorThrown );
                     },
                     beforeSend: function(jqxhr, settings) {
                         jqxhr.setRequestHeader('Authorization',
@@ -88,7 +88,7 @@ var Site = {
                     success: toggleSubscription,
                     error: function (jqXHR,  textStatus,  errorThrown) {
                         console.log("Subscription Error", textStatus,
-                                    errorThrown )
+                                    errorThrown );
                     },
                     beforeSend: function(jqxhr, settings) {
                         jqxhr.setRequestHeader('Authorization',

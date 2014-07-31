@@ -1,0 +1,52 @@
+<div id="issue_{issue_id}" class="col-md-3">
+<div class="panel panel-default">
+<div class="panel-heading">
+<h4 class="panel-title">{issue_name}</h4>
+</div>
+<div class="panel-body">
+<div class="col-md-4">
+<img height="auto" width="175%" src="{issue_image}">
+</div>
+<div class="col-md-8">
+<table class="table">
+<tr>
+<th>
+<a class="cvlink" href="{issue_url}">
+<i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top"
+   title="View volume on Comicvine"></i>
+</a>
+</th>
+<td>
+{.section pull_key}
+<a class="disabled pull" data-pull="{pull_key}" data-subscribed="False">
+  <i class="fa fa-square-o" data-toggle="tooltip" data-placement="top"
+     title="Add this issue to your library"></i></a>
+<a class="disabled read" data-volume="{pull_key}" data-read="False">
+  <i class="fa fa-bookmark-o" data-toggle="tooltip" data-placement="top"
+     title="Mark this issue as read"></i></a>
+<a class="disabled delete" data-volume="{pull_key}">
+  <i class="fa fa-trash-o" data-toggle="tooltip" data-placement="top"
+     title="Remove this issue from your pulls"></i></a>
+{.or}
+<a class="disabled add" data-issue="{issue_id}">
+  <i class="fa fa-plus" data-toggle="tooltip" data-placement="top"
+     title="Add this issue to your pulls"></i>
+</a>
+{.end}
+</td>
+</tr>
+<tr>
+<th>
+<i class="fa fa-book" data-toggle="tooltip" data-placement="top"
+   title="This issue is part of volume"></i>
+</th>
+<td>{volume_name}</td>
+</tr>
+<tr>
+<th><i class="fa fa-calendar"></i></th>
+<td>{issue_date}</td>
+</tr>
+</table>
+</div>
+</div>
+</div>

@@ -21,6 +21,9 @@ $( document ).on( "pulldbAuthorised", function (event, token) {
   var source = $.url().param("source");
   var search_url;
   var context = this;
+  if ( query ) {
+      $( "input[name=q]" ).attr("value", query);
+  }
   if ( source == "local" ) {
     console.log("Search local for " + query);
     search_url = "/api/volumes/search?q=" + query;
@@ -34,7 +37,7 @@ $( document ).on( "pulldbAuthorised", function (event, token) {
       dataType: "json",
       success: renderResults,
       error: function (jqXHR,  textStatus,  errorThrown) {
-        console.log( "NewPulls Error", textStatus, errorThrown )},
+        console.log( "NewPulls Error", textStatus, errorThrown );},
       beforeSend: function(jqxhr, settings) {
           jqxhr.setRequestHeader('Authorization', 'Bearer ' + auth_token);
       },
@@ -80,7 +83,7 @@ function renderResults(data) {
               $( panel_id ).find("[data-toggle=tooltip]").tooltip();
           },
           error: function (jqXHR,  textStatus,  errorThrown) {
-              console.log( "renderResult Error", textStatus, errorThrown )},
+              console.log( "renderResult Error", textStatus, errorThrown );},
           beforeSend: function(jqxhr, settings) {
               jqxhr.setRequestHeader('Authorization', 'Bearer ' + auth_token);
           },
@@ -108,8 +111,8 @@ function volume_panel(volume_doc) {
                   'title="View volume on Comicvine"></i></a>' +
                   '</th>' +
                   '<td>' +
-                  '<a class="disabled subscription" data-volume="'
-                  + volume_doc.id + '" data-subscribed="False">' +
+                  '<a class="disabled subscription" data-volume="' +
+                  volume_doc.id + '" data-subscribed="False">' +
                   '<i class="fa fa-heart-o"></i></a>' +
                   '</td>' +
                   '</tr>' +
