@@ -1,6 +1,10 @@
+var volume_panel_loading;
+var volume_panel;
+
 var Discover = {
     init: function() {
         this.registerTabs();
+        this.templateLoad();
     },
 
     registerTabs: function() {
@@ -8,6 +12,17 @@ var Discover = {
             e.preventDefault();
             console.log(e, this);
             $( this ).tab( "show ");
+        });
+    },
+
+    templateLoad: function() {
+        $.get('/static/volume_doc.jst', function(data) {
+            volume_panel_loading = jsontemplate.Template(
+                data, {undefined_str: ""});
+        });
+        $.get('/static/volume_panel.jst', function(data) {
+            volume_panel = jsontemplate.Template(
+                data, {undefined_str: ""});
         });
     },
 };
@@ -30,6 +45,8 @@ $( document ).on( "pulldbAuthorised", function (event, token) {
   }
   if ( source == "comicvine" ) {
     console.log("Search cv for " + query);
+    $('li>a[href=#comicvine]').tab('show');
+    search_url = "/api/volumes/search/comicvine?q=" + query;
   }
   if ( search_url ) {
     $.ajax({
@@ -46,18 +63,32 @@ $( document ).on( "pulldbAuthorised", function (event, token) {
 });
 
 function renderResults(data) {
+  var source = $.url().param("source");
   var items = data.results.length;
   console.log("Found " + items + " results.", data);
   for (var i=0; i<items; i++){
-      console.log(data.results[i]);
-      volume_doc = data.results[i];
-      var panel = volume_panel(volume_doc);
+      var result = data.results[i];
+      var panel;
+      if( source == "local") {
+          panel = $( volume_panel_loading.expand({
+              "volume_id": String(result.id),
+              "volume_name": result.name,
+              "volume_start_year": result.start_year
+          }) );
+      } else {
+          panel = $( volume_panel_loading.expand({
+              "volume_id": String(result.id),
+              "volume_name": result.name,
+              "volume_start_year": result.start_year
+          }) );
+      }
       $("#search-results").append(panel);
       $.ajax({
-          url: "/api/volumes/" + volume_doc.id + "/get?context=1",
+          url: "/api/volumes/" + String(result.id) + "/get?context=1",
           dataType: "json",
           success: function(data) {
-              var panel_id = '#volume_' + data.results[0].volume.id;
+              var panel_id = '#volume_' + String(data.results[0].volume.id);
+              console.log(panel_id, $(panel_id));
               $( panel_id ).find('i.logo').replaceWith(
                   '<img width="90%" height="auto" src="' +
                       data.results[0].volume.image + '">');
@@ -90,52 +121,4 @@ function renderResults(data) {
       });
   }
   Site.subscriptionEvents();
-}
-
-function volume_panel(volume_doc) {
-    var panel = $('<div id="volume_' + volume_doc.id + '" class="col-md-3">' +
-                  '<div class="panel panel-default">' +
-                  '<div class="panel-heading"><h3 class="panel-title">' +
-                  volume_doc.name + '</h3></div>' +
-                  '<div class="panel-body">' +
-                  '<div class="col-md-6">' +
-                  '<i class="fa fa-spinner fa-5x fa-spin logo"></i>' +
-                  '</div>' +
-                  '<div class="col-md-4">' +
-                  '<table class="table">' +
-                  '<tr>' + // volume
-                  '<th>' +
-                  '<a class="disabled cvlink">' +
-                  '<i class="fa fa-info-circle" ' +
-                  'data-toggle="tooltip" data-placement="top" ' +
-                  'title="View volume on Comicvine"></i></a>' +
-                  '</th>' +
-                  '<td>' +
-                  '<a class="disabled subscription" data-volume="' +
-                  volume_doc.id + '" data-subscribed="False">' +
-                  '<i class="fa fa-heart-o"></i></a>' +
-                  '</td>' +
-                  '</tr>' +
-                  '<tr><th>' +
-                  '<i class="fa fa-institution" ' +
-                  'data-toggle="tooltip" data-placement="top" ' +
-                  'title="Published by"></i>' +
-                  '</th><td>' +
-                  '<i class="fa fa-spin fa-spinner publisher"></i>' +
-                  '</td></tr>' + // publisher
-                  '<tr><th><i class="fa fa-calendar"></i></th>' +  // date
-                  '<td>' + Number(volume_doc.start_year) + '</td></tr>' +
-                  '<tr><th>' +
-                  '<i class="fa fa-bookmark" ' +
-                  'data-toggle="tooltip" data-placement="top" ' +
-                  'title="Number of issues"></i></th>' +
-                  '<td>' +
-                  '<i class="fa fa-spinner fa-spin issues"></i>' +
-                  '</td></tr>' + // issues
-                  '</table>' +
-                  '</div>' +
-                  '</div>' +
-                  '</div>'
-    );
-    return panel;
 }

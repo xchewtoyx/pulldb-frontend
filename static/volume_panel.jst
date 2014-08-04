@@ -1,0 +1,42 @@
+<div id="volume_{ volume_id }" class="col-md-3">
+    <div class="panel panel-default">
+    <div class="panel-heading">
+    <h3 class="panel-title">{ volume_name }</h3></div>
+    <div class="panel-body">
+    <div class="col-md-6">
+    <i class="fa fa-spinner fa-5x fa-spin logo"></i>
+    </div>
+    <div class="col-md-4">
+    <table class="table">
+    <tr> <!-- volume -->
+    <th>
+    <a class="disabled cvlink">
+    <i class="fa fa-info-circle"
+       data-toggle="tooltip" data-placement="top"
+       title="View volume on Comicvine"></i></a>
+    </th>
+    <td>
+    <a class="disabled subscription" data-volume="{ volume_id }"
+       data-subscribed="False">
+    <i class="fa fa-heart-o"></i></a>
+    </td>
+    </tr>
+    <tr><th>
+    <i class="fa fa-institution"
+       data-toggle="tooltip" data-placement="top"
+       title="Published by"></i>
+    </th><td>
+    <i class="fa fa-spin fa-spinner publisher"></i>
+    </td></tr>
+    <tr><th><i class="fa fa-calendar"></i></th>
+    <td>{ volume_start_year }</td></tr>
+    <tr><th>
+    <i class="fa fa-bookmark"
+       data-toggle="tooltip" data-placement="top"
+       title="Number of issues"></i></th>
+    <td><i class="fa fa-spinner fa-spin issues"></i>
+    </td></tr>
+    </table>
+    </div>
+    </div>
+</div>

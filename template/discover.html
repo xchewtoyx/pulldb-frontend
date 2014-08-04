@@ -23,27 +23,33 @@
   <div class="tab-pane active" id="localsearch">
     <form role="form">
       <input type="hidden" name="source" value="local">
-      <div class="input-group">
-        <input type="text" class="form-control" name="q"
-               placeholder="Search local index">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="submit">
-            <i class="fa fa-search"></i></button>
-        </span>
-      </div><!-- /input-group -->
+      <div class="form-group">
+        <label>Search local index:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" name="q"
+                 placeholder="Search local index">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+              <i class="fa fa-search"></i></button>
+          </span>
+        </div><!-- /input-group -->
+      </div>
     </form>
   </div>
   <div class="tab-pane" id="comicvine">
     <form role="form">
       <input type="hidden" name="source" value="comicvine">
-      <div class="input-group">
-      <input type="text" class="form-control" name="q"
-             placeholder="Search comicvine database">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="submit">
-          <i class="fa fa-search"></i></button>
-      </span>
-    </div><!-- /input-group -->
+      <div class="form-group">
+        <label>Search Comicvine:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" name="q"
+                 placeholder="Search comicvine database">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+              <i class="fa fa-search"></i></button>
+          </span>
+        </div><!-- /input-group -->
+      </div>
     </form>
   </div>
 </div>
@@ -52,6 +58,7 @@
 <div id="search-results"></div>
 {% endblock content %}
 {% block footer %}
+<script src="/static/json-template.js"></script>
 <script src="/static/discover.js"></script>
 <script src="https://apis.google.com/js/client.js?onload=handleApiLoad">
 </script>
