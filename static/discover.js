@@ -33,11 +33,15 @@ $( document ).ready( function() {
 
 $( document ).on( "pulldbAuthorised", function (event, token) {
   var query = $.url().param("q");
+  var volume_ids = $.url().param("volume_ids");
   var source = $.url().param("source");
   var search_url;
   var context = this;
   if ( query ) {
       $( "input[name=q]" ).attr("value", query);
+  }
+  if ( volume_ids ) {
+      $( "input[name=volume_ids]" ).attr("value", volume_ids);
   }
   if ( source == "local" ) {
     console.log("Search local for " + query);
@@ -46,7 +50,13 @@ $( document ).on( "pulldbAuthorised", function (event, token) {
   if ( source == "comicvine" ) {
     console.log("Search cv for " + query);
     $('li>a[href=#comicvine]').tab('show');
-    search_url = "/api/volumes/search/comicvine?q=" + query;
+    search_url = "/api/volumes/search/comicvine?";
+    if ( volume_ids ) {
+        console.log(volume_ids);
+        search_url = search_url + "volume_ids=" + volume_ids;
+    } else if ( query ) {
+        search_url = search_url + "q=" + query;
+    }
   }
   if ( search_url ) {
     $.ajax({
