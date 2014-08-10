@@ -25,15 +25,10 @@
 <script type="text/javascript">
 $(document).on( "pulldbAuthorised", function (event, token) {
   console.log("Handling authorised", token);
-  $.ajax({
+  Site.apiFetch({
     url: "/api/pulls/list/new?context=1",
     dataType: "json",
     success: renderNewPulls,
-    error: function (jqXHR,  textStatus,  errorThrown) {
-      console.log( "NewPulls Error", textStatus, errorThrown )},
-    beforeSend: function(jqxhr, settings) {
-        jqxhr.setRequestHeader('Authorization', 'Bearer ' + token);
-    },
   });
 });
 </script>

@@ -12,24 +12,24 @@
 <tr>
 <th>
 <a class="cvlink" href="{issue_url}">
-<i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top"
+<i class="fa fa-fw fa-info-circle" data-toggle="tooltip" data-placement="top"
    title="View volume on Comicvine"></i>
 </a>
 </th>
 <td>
 {.section pull_key}
-<a class="disabled pull" data-pull="{pull_key}" data-subscribed="False">
-  <i class="fa fa-square-o" data-toggle="tooltip" data-placement="top"
+<a class="disabled pull" data-pull="{issue_id}" data-pulled="False">
+  <i class="fa fa-fw fa-square-o" data-toggle="tooltip" data-placement="top"
      title="Add this issue to your library"></i></a>
-<a class="disabled read" data-volume="{pull_key}" data-read="False">
-  <i class="fa fa-bookmark-o" data-toggle="tooltip" data-placement="top"
+<a class="disabled read" data-pull="{pull_key}" data-read="False">
+  <i class="fa fa-fw fa-bookmark-o" data-toggle="tooltip" data-placement="top"
      title="Mark this issue as read"></i></a>
-<a class="disabled delete" data-volume="{pull_key}">
-  <i class="fa fa-trash-o" data-toggle="tooltip" data-placement="top"
+<a class="disabled delete" data-pull="{pull_key}">
+  <i class="fa fw-fw fa-trash-o" data-toggle="tooltip" data-placement="top"
      title="Remove this issue from your pulls"></i></a>
 {.or}
 <a class="disabled add" data-issue="{issue_id}">
-  <i class="fa fa-plus" data-toggle="tooltip" data-placement="top"
+  <i class="fa fa-fw fa-plus" data-toggle="tooltip" data-placement="top"
      title="Add this issue to your pulls"></i>
 </a>
 {.end}
