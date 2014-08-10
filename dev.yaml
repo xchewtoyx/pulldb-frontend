@@ -43,3 +43,6 @@ handlers:
 - url: /discover
   script: frontend.discover.app
   login: required
+- url: /consume
+  script: frontend.consume.app
+  login: required
