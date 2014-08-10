@@ -25,6 +25,34 @@ var Discover = {
                 data, {undefined_str: ""});
         });
     },
+
+    updateVolume: function(data) {
+        var panel_id = '#volume_' + String(data.results[0].volume.id);
+        console.log(panel_id, $(panel_id));
+        $( panel_id ).find('i.logo').replaceWith(
+            '<img width="90%" height="auto" src="' +
+                data.results[0].volume.image + '">');
+        $( panel_id ).find("a.cvlink")
+            .attr('href', data.results[0].volume.site_detail_url).end()
+            .removeClass("disabled");
+        if(data.results[0].subscription.id) {
+            $( panel_id ).find("a.subscription")
+                .attr("data-subscribed", "True").end()
+                .find("i.fa-heart-o").toggleClass("fa-heart fa-heart-o");
+        }
+        $( panel_id ).find("a.subscription").removeClass("disabled");
+        $( panel_id ).find("i.publisher")
+            .wrap('<span data-toggle="tooltip" data-placement="top" ' +
+                  'title="' + data.results[0].publisher.name + '"/>')
+            .replaceWith(
+                $('<img src="' + data.results[0].publisher.image + '">')
+            );
+        $( panel_id ).find("i.issues")
+            .replaceWith("<span>" +
+                         data.results[0].volume.issue_count +
+                         "</span>");
+        $( panel_id ).find("[data-toggle=tooltip]").tooltip();
+    },
 };
 
 $( document ).ready( function() {
@@ -59,16 +87,11 @@ $( document ).on( "pulldbAuthorised", function (event, token) {
     }
   }
   if ( search_url ) {
-    $.ajax({
-      url: search_url,
-      dataType: "json",
-      success: renderResults,
-      error: function (jqXHR,  textStatus,  errorThrown) {
-        console.log( "NewPulls Error", textStatus, errorThrown );},
-      beforeSend: function(jqxhr, settings) {
-          jqxhr.setRequestHeader('Authorization', 'Bearer ' + auth_token);
-      },
-    });
+      Site.apiFetch({
+          url: search_url,
+          dataType: "json",
+          success: renderResults,
+      });
   }
 });
 
@@ -93,41 +116,10 @@ function renderResults(data) {
           }) );
       }
       $("#search-results").append(panel);
-      $.ajax({
+      Site.apiFetch({
           url: "/api/volumes/" + String(result.id) + "/get?context=1",
           dataType: "json",
-          success: function(data) {
-              var panel_id = '#volume_' + String(data.results[0].volume.id);
-              console.log(panel_id, $(panel_id));
-              $( panel_id ).find('i.logo').replaceWith(
-                  '<img width="90%" height="auto" src="' +
-                      data.results[0].volume.image + '">');
-              $( panel_id ).find("a.cvlink")
-                  .attr('href', data.results[0].volume.site_detail_url).end()
-                  .removeClass("disabled");
-              if(data.results[0].subscription.id) {
-                  $( panel_id ).find("a.subscription")
-                      .attr("data-subscribed", "True").end()
-                      .find("i.fa-heart-o").toggleClass("fa-heart fa-heart-o");
-              }
-              $( panel_id ).find("a.subscription").removeClass("disabled");
-              $( panel_id ).find("i.publisher")
-                  .wrap('<span data-toggle="tooltip" data-placement="top" ' +
-                        'title="' + data.results[0].publisher.name + '"/>')
-                  .replaceWith(
-                      $('<img src="' + data.results[0].publisher.image + '">')
-                      );
-              $( panel_id ).find("i.issues")
-                  .replaceWith("<span>" +
-                               data.results[0].volume.issue_count +
-                              "</span>");
-              $( panel_id ).find("[data-toggle=tooltip]").tooltip();
-          },
-          error: function (jqXHR,  textStatus,  errorThrown) {
-              console.log( "renderResult Error", textStatus, errorThrown );},
-          beforeSend: function(jqxhr, settings) {
-              jqxhr.setRequestHeader('Authorization', 'Bearer ' + auth_token);
-          },
+          success: Discover.updateVolume,
       });
   }
   Site.subscriptionEvents();

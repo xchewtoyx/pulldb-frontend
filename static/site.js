@@ -17,6 +17,36 @@ var Site = {
         this.subscriptionEvents();
     },
 
+    apiFetch: function(settings) {
+        var request = {
+            success: settings.success,
+            error: function (jqXHR,  textStatus,  errorThrown) {
+                console.log( "NewPulls Error", textStatus, errorThrown );},
+            beforeSend: function(jqxhr, settings) {
+                jqxhr.setRequestHeader('Authorization', 'Bearer ' + auth_token);
+            },
+        };
+        if (settings.method) {
+            request.type = settings.method;
+        }
+        if (settings.data) {
+            request.data = settings.data;
+        }
+        if (settings.dataType) {
+            request.dataType = settings.dataType;
+        }
+        console.log('Fetching:', settings.url, request);
+        return $.ajax(settings.url, request);
+    },
+
+    authEvents: function() {
+        $("#auth-required .btn").on("click", $.proxy(function() {
+            gapi.auth.authorize({
+                client_id: this.clientId, scope: this.scopes, immediate: false,
+            }, this.handleAuthResult);
+        }, this));
+    },
+
     clientAuth: function() {
         console.log("doing clientauth...", this);
         gapi.client.setApiKey(this.apiKey);
@@ -37,14 +67,6 @@ var Site = {
         }
     },
 
-    authEvents : function() {
-        $("#auth-required .btn").on("click", $.proxy(function() {
-            gapi.auth.authorize({
-                client_id: this.clientId, scope: this.scopes, immediate: false,
-            }, this.handleAuthResult);
-        }, this));
-    },
-
     subscriptionEvents : function () {
         $("a.subscription").on("click", function () {
             var volume = $(this);
@@ -59,41 +81,25 @@ var Site = {
             }
             if(volume.data("subscribed") == "True") {
                 console.log('unsubscribing...');
-                $.ajax({
-                    type: "POST",
+                Site.apiFetch({
+                    method: "POST",
                     url: "/api/subscriptions/remove",
                     data: JSON.stringify({
                         volumes: [volume.data("volume")],
                     }),
                     success: toggleSubscription,
-                    error: function (jqXHR,  textStatus,  errorThrown) {
-                        console.log("Subscription Error", textStatus,
-                                    errorThrown );
-                    },
-                    beforeSend: function(jqxhr, settings) {
-                        jqxhr.setRequestHeader('Authorization',
-                                               'Bearer ' + auth_token);
-                    },
                 });
             } else {
                 console.log('subscribing...', JSON.stringify({
                     volumes: [volume.data("volume")],
                 }));
-                $.ajax({
-                    type: "POST",
+                Site.apiFetch({
+                    method: "POST",
                     url: "/api/subscriptions/add",
                     data: JSON.stringify({
                         volumes: [volume.data("volume")],
                     }),
                     success: toggleSubscription,
-                    error: function (jqXHR,  textStatus,  errorThrown) {
-                        console.log("Subscription Error", textStatus,
-                                    errorThrown );
-                    },
-                    beforeSend: function(jqxhr, settings) {
-                        jqxhr.setRequestHeader('Authorization',
-                                               'Bearer ' + auth_token);
-                    },
                 });
             }
         });
